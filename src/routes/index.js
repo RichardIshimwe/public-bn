@@ -1,1 +1,0 @@
-//this is the main file that will be used to define all the routes for the application
