@@ -8,6 +8,10 @@ class signupControllers {
       const { email, username, password } = req.body;
       const salt = bcrypt.genSaltSync(10);
       const passwordHashed = bcrypt.hashSync(password, salt);
+      const check = await signup.findOne({ username });
+      if (check !== null) {
+        return response.error(res, 400, "username already exist");
+      }
       const newUser = new signup({ email, username, password: passwordHashed });
       await newUser.save();
       response.success(res, 201, "signup complete", newUser);
@@ -27,6 +31,10 @@ class signupControllers {
   static async transact(req, res) {
     try {
       const { amount, op, username } = req.body;
+      const check = await signup.findOne({ username });
+      if (check == null) {
+        return response.error(res, 404, "the user does not exist");
+      }
       if (op === "add") {
         await signup.updateOne(
           { username: username },

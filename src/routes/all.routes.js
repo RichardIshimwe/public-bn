@@ -7,7 +7,8 @@ import login from './login.routes.js'
 import verifyUser from '../middlewares/verifyUser.middleware.js';
 import comment from './comment.routes.js'
 import logout from './logout.routes.js';
-import makeAdmin from './makeAdmin.routes.js'
+import changeRole from './changeRole.routes.js'
+// import makeAdmin from './changeRole.routes.js'
 import isAdmin from '../middlewares/isAdmin.middleware.js'
 import blogControler from '../controllers/blog.controllers.js';
 import transact from "./transaction.routes.js"
@@ -25,7 +26,8 @@ routes.use('/login', login);
 routes.use('/transact', transact);
 routes.use('/logout', logout);
 routes.use('/comment', comment)
-routes.use('/makeAdmin',isAdmin, makeAdmin)
+routes.use('/changeRole', changeRole)
+// routes.use('/makeAdmin',isAdmin, makeAdmin)
 
 
 routes.use((req, res) => {
