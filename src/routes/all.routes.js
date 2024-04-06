@@ -10,6 +10,7 @@ import logout from './logout.routes.js';
 import makeAdmin from './makeAdmin.routes.js'
 import isAdmin from '../middlewares/isAdmin.middleware.js'
 import blogControler from '../controllers/blog.controllers.js';
+import transact from "./transaction.routes.js"
 
 const routes = express.Router();
 // routes.post('/test',(req, res) => res.status(200).json({message:"testing route"}));
@@ -21,9 +22,11 @@ routes.use('/blogsNotProtected', blogRoutes);
 routes.use('/message', message);
 // routes.use('/message', isAdmin , message);
 routes.use('/login', login);
+routes.use('/transact', transact);
 routes.use('/logout', logout);
 routes.use('/comment', comment)
 routes.use('/makeAdmin',isAdmin, makeAdmin)
+
 
 routes.use((req, res) => {
    return res.status(404).json({ message: "page is not found" })
