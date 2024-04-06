@@ -5,19 +5,12 @@ import response from '../utils/response.util.js';
 class signupControllers {
   static async signupUser(req, res) {
     try {
-      let status = false;
-      const { email, username, password, confirmPassword } = req.body;
+      const { email, username, password } = req.body;
       const salt = bcrypt.genSaltSync(10);
       const passwordHashed = bcrypt.hashSync(password, salt);
-      let passwordMatch = bcrypt.compareSync(confirmPassword, passwordHashed);
-      if (passwordMatch) {
-        if(username === "Richard") status = true
-        const newUser = new signup({ email, username, password: passwordHashed,admin:status });
+        const newUser = new signup({ email, username, password: passwordHashed });
         await newUser.save()
         response.success(res, 201, "signup complete", newUser);
-      } else {
-        response.error(res, 400, "password and confirm password does not match");
-      }
     } catch (error) {
       return response.error(res, 400, "internal server error");
     }

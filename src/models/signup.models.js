@@ -13,11 +13,15 @@ const signupSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
         minLength: 8
     },
-    admin: {
-        type: Boolean
+    role: {
+        type: String,
+        default: 'user',
+    },
+    wallet: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,

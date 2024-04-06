@@ -12,10 +12,6 @@ const validate = joi.object({
         'string.empty': 'Please enter the username',
         'any.required': 'username field can not be empty'
     }),
-    confirmPassword: joi.string().required().messages({
-        'string.empty': 'Please enter the confirmation Password',
-        'any.required': 'Password field can not be empty'
-    }),
     password: joi.string().required().messages({
         'string.empty': 'Password field can not be empty',
         'any.required': 'Password field can not be empty'
