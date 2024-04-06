@@ -36,7 +36,7 @@ app.get("/", (req, res) =>
   response.success(
     res,
     200,
-    "welcome to the back-end of my project use /api-docs to get the swagger documentation "
+    "welcome to the back-end of my project."
   )
 );
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(docs));
