@@ -5,7 +5,8 @@ import isAdmin from '../middlewares/isAdmin.middleware.js'
 
 const routes = express.Router();
 
-routes.post('/', signupMiddleware, signup.signupUser)
+routes.post('/', signup.signupUser)
+// routes.post('/', signupMiddleware, signup.signupUser)
 routes.get('/', signup.allUsers)
 // routes.get('/',isAdmin, signup.allUsers)
 
