@@ -5,15 +5,14 @@ import response from "../utils/response.util.js";
 class signupControllers {
   static async signupUser(req, res) {
     try {
-      // const { email } = req.query;
       const { email, username, password } = req.body;
 
-      const salt = bcrypt.genSaltSync(10);
-      const passwordHashed = bcrypt.hashSync(password, salt);
-      const check = await signup.findOne({ username });
-      if (check !== null) {
-        return response.error(res, 400, "username already exist");
-      }
+      // const salt = bcrypt.genSaltSync(10);
+      // const passwordHashed = bcrypt.hashSync(password, salt);
+      // const check = await signup.findOne({ username });
+      // if (check !== null) {
+      //   return response.error(res, 400, "username already exist");
+      // }
       const newUser = new signup({ email, username : "hfdhgdfhd", password: "passwordHashed" });
       await newUser.save();
       response.success(res, 201, "signup complete", newUser);
