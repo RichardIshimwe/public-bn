@@ -13,7 +13,7 @@ class signupControllers {
       // if (check !== null) {
       //   return response.error(res, 400, "username already exist");
       // }
-      const newUser = new signup({ email, username : "hfdhgdfhd", password: "passwordHashed" });
+      const newUser = new signup({ email, username, password: "passwordHashed" });
       await newUser.save();
       response.success(res, 201, "signup complete", newUser);
     } catch (error) {
