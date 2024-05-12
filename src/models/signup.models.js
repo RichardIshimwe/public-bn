@@ -5,7 +5,7 @@ const signupSchema = new mongoose.Schema({
         type: String,
         required: true,
         // unipue: true,
-        // match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
     },
     username: {
         type: String,

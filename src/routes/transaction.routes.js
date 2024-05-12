@@ -4,6 +4,6 @@ import signupMiddleware from '../middlewares/checkSignup.middleware.js'
 
 const routes = express.Router();
 
-routes.post('/', signup.transact)
+routes.patch('/', signup.transact)
 
 export default routes
