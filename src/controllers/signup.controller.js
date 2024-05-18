@@ -40,31 +40,31 @@ class signupControllers {
   
   static async allUsers(req, res) {
 
-    function sumWallets(items) {
-      const result = [];
-      const groupedItems = {};
-      items.forEach(item => {
-          const username = item.username;
-          if (!groupedItems[username]) {
-              groupedItems[username] = {...item}; 
-              groupedItems[username].wallet += item.wallet; 
-          } else {
-              groupedItems[username].wallet += item.wallet; 
-          }
-      });
+  //   function sumWallets(items) {
+  //     const result = [];
+  //     const groupedItems = {};
+  //     items.forEach(item => {
+  //         const username = item.username;
+  //         if (!groupedItems[username]) {
+  //             groupedItems[username] = {...item}; 
+  //             groupedItems[username].wallet += item.wallet; 
+  //         } else {
+  //             groupedItems[username].wallet += item.wallet; 
+  //         }
+  //     });
   
-      Object.values(groupedItems).forEach(item => {
-          result.push(item);
-      });
+  //     Object.values(groupedItems).forEach(item => {
+  //         result.push(item);
+  //     });
   
-      return result;
-  }
+  //     return result;
+  // }
     
     try {
       const allUsers = await signup.find();
-      const plainObjects = allUsers.map(doc => doc.toObject());
-      const walletSum = sumWallets(plainObjects);
-      response.success(res, 200, `Aggregated users are ${walletSum.length}`, walletSum);
+      // const plainObjects = allUsers.map(doc => doc.toObject());
+      // const walletSum = sumWallets(plainObjects);
+      response.success(res, 200, `all users are : ${allUsers.length}`, allUsers);
     } catch (error) {
       console.log(error);
       return response.error(res, 500, "internal server error");
@@ -72,32 +72,37 @@ class signupControllers {
   }
 
   static async userById(req, res) {
-    function sumWallets(items) {
-      const result = [];
-      const groupedItems = {};
-      items.forEach(item => {
-          const username = item.username;
-          if (!groupedItems[username]) {
-              groupedItems[username] = {...item}; 
-              groupedItems[username].wallet += item.wallet; 
-          } else {
-              groupedItems[username].wallet += item.wallet; 
-          }
-      });
+  //   function sumWallets(items) {
+  //     const result = [];
+  //     const groupedItems = {};
+  //     items.forEach(item => {
+  //         const username = item.username;
+  //         if (!groupedItems[username]) {
+  //             groupedItems[username] = {...item}; 
+  //             groupedItems[username].wallet += item.wallet; 
+  //         } else {
+  //             groupedItems[username].wallet += item.wallet; 
+  //         }
+  //     });
   
-      Object.values(groupedItems).forEach(item => {
-          result.push(item);
-      });
-      return result;
-  }
+  //     Object.values(groupedItems).forEach(item => {
+  //         result.push(item);
+  //     });
+  //     return result;
+  // }
     try {
       const { id } = req.query;
-      const allUsers = await signup.find();
-      const plainObjects = allUsers.map(doc => doc.toObject());
-      const walletSum = sumWallets(plainObjects);
-      const user = walletSum.filter((item) => item.username === id);
-      console.log(user[0])
-      response.success(res, 200, `Aggregated users are ${user.length}`, user[0]);
+      const check = await signup.findOne({ username : id});
+           console.log("card id : ",id);
+      if (check == null) {
+        return response.error(res, 400, "username does not exist");
+      }
+      // const allUsers = await signup.find();
+      // const plainObjects = allUsers.map(doc => doc.toObject());
+      // const walletSum = sumWallets(plainObjects);
+      // const user = walletSum.filter((item) => item.username === id);
+      // console.log(user[0])
+      response.success(res, 200, `Aggregated users are ${check.length}`, check);
     } catch (error) {
       console.log(error);
       return response.error(res, 500, "internal server error");
@@ -110,11 +115,11 @@ class signupControllers {
       console.log(amount, op, id)
       // there is no need to check if the user exist because the user must exist before the wallet can be updated(all cards are in the db for now)
       console.log("checking if the user exists");
-      const check = await signup.findOne({ username : id});
-      console.log("check : ",check);
-      if (check == null) {
-        return response.error(res, 404, "the user does not exist");
-      }
+      // const check = await signup.findOne({ username : id});
+      // console.log("check : ",check);
+      // if (check == null) {
+      //   return response.error(res, 404, "the user does not exist");
+      // }
       if (op === "add") {
         const updated =  await signup.updateOne(
           { username: id },
@@ -122,15 +127,15 @@ class signupControllers {
         );
         response.success(res, 200, updated);
       } else if (op === "sub") {
-        // this is checked on the hardware side
-        // const user = await signup.findOne({ username: username });
-        // if (user.wallet < amount) {
-        //   return response.error(res, 400, "insufficient funds");
-        // }
+        await signup.updateOne(
+          { username: "Admin" },
+          { $inc: { wallet: amount } }
+        );
        const updated =  await signup.updateOne(
           { username: id },
           { $inc: { wallet: -amount } }
         );
+        console.log(updated);
         response.success(res, 200, updated);
       }
 
