@@ -7,7 +7,6 @@ class signupControllers {
     try {
       // const { email, username, password } = req.body;
       const { username } = req.query;
-      console.log(username);
       const salt = bcrypt.genSaltSync(10);
       const passwordHashed = bcrypt.hashSync("password", salt);
       // const check = await signup.findOne({ username });
@@ -80,10 +79,9 @@ class signupControllers {
       const { id } = req.query;
       const allUsers = await signup.find();
       const plainObjects = allUsers.map(doc => doc.toObject());
-      console.log(allUsers)
       const walletSum = sumWallets(plainObjects);
       const user = walletSum.filter((item) => item.username === id);
-      response.success(res, 200, `Aggregated users are ${user.length}`, user);
+      response.success(res, 200, `Aggregated users are ${user.length}`, user[0]);
     } catch (error) {
       console.log(error);
       return response.error(res, 500, "internal server error");
@@ -93,7 +91,6 @@ class signupControllers {
   static async transact(req, res) {
     try {
       const { amount, op, id } = req.query;
-      console.log(amount - 20, op, id);
 
       // there is no need to check if the user exist because the user must exist before the wallet can be updated(all cards are in the db for now)
       // const check = await signup.findOne({ username : id});
@@ -105,7 +102,6 @@ class signupControllers {
           { username: id },
           { $inc: { wallet: amount } }
         );
-        console.log(updated);
         response.success(res, 200, updated);
       } else if (op === "sub") {
         // this is checked on the hardware side

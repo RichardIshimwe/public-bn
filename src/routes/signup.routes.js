@@ -9,8 +9,6 @@ routes.post('/test', (req, res) => {
 });
 
 routes.post('/', signup.signupUser)
-// // routes.post('/', signupMiddleware, signup.signupUser)
 routes.get('/', signup.allUsers)
-// // routes.get('/',isAdmin, signup.allUsers)
 
 export default routes
