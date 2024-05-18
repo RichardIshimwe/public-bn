@@ -107,12 +107,14 @@ class signupControllers {
   static async transact(req, res) {
     try {
       const { amount, op, id } = req.query;
-
+      console.log(amount, op, id)
       // there is no need to check if the user exist because the user must exist before the wallet can be updated(all cards are in the db for now)
-      // const check = await signup.findOne({ username : id});
-      // if (check == null) {
-      //   return response.error(res, 404, "the user does not exist");
-      // }
+      console.log("checking if the user exists");
+      const check = await signup.findOne({ username : id});
+      console.log("check : ",check);
+      if (check == null) {
+        return response.error(res, 404, "the user does not exist");
+      }
       if (op === "add") {
         const updated =  await signup.updateOne(
           { username: id },
