@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import response from "./utils/response.util.js";
 import swaggerUi from "swagger-ui-express";
 import docs from "./documentation/index.js";
-import multer from "multer";
 import signup from "./models/signup.models.js";
 
 const app = express();

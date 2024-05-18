@@ -10,7 +10,6 @@ const signupSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unipue: true
     },
     password: {
         type: String,

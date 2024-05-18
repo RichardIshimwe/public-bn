@@ -7,13 +7,13 @@ class signupControllers {
     try {
       // const { email, username, password } = req.body;
       const { username } = req.query;
-
+      console.log(username);
       const salt = bcrypt.genSaltSync(10);
       const passwordHashed = bcrypt.hashSync("password", salt);
-      const check = await signup.findOne({ username });
-      if (check !== null) {
-        return response.error(res, 400, "username already exist");
-      }
+      // const check = await signup.findOne({ username });
+      // if (check !== null) {
+      //   return response.error(res, 400, "username already exist");
+      // }
       const newUser = new signup({ email : "pubtoiletmanage@gmail.com", username , password: passwordHashed });
       await newUser.save();
       response.success(res, 201, "signup complete", newUser);
@@ -21,10 +21,35 @@ class signupControllers {
       return response.error(res, 400, "internal server error");
     }
   }
+  // 192.168.1.51
+  
   static async allUsers(req, res) {
+
+    function sumWallets(items) {
+      const result = [];
+      const groupedItems = {};
+      items.forEach(item => {
+          const username = item.username;
+          if (!groupedItems[username]) {
+              groupedItems[username] = {...item}; 
+              groupedItems[username].wallet += item.wallet; 
+          } else {
+              groupedItems[username].wallet += item.wallet; 
+          }
+      });
+  
+      Object.values(groupedItems).forEach(item => {
+          result.push(item);
+      });
+  
+      return result;
+  }
+    
     try {
-      let allUser = await signup.find();
-      response.success(res, 200, `all users are ${allUser.length}`, allUser);
+      const allUsers = await signup.find();
+      const plainObjects = allUsers.map(doc => doc.toObject());
+      const walletSum = sumWallets(plainObjects);
+      response.success(res, 200, `Aggregated users are ${walletSum.length}`, walletSum);
     } catch (error) {
       console.log(error);
       return response.error(res, 500, "internal server error");
@@ -32,11 +57,33 @@ class signupControllers {
   }
 
   static async userById(req, res) {
+    function sumWallets(items) {
+      const result = [];
+      const groupedItems = {};
+      items.forEach(item => {
+          const username = item.username;
+          if (!groupedItems[username]) {
+              groupedItems[username] = {...item}; 
+              groupedItems[username].wallet += item.wallet; 
+          } else {
+              groupedItems[username].wallet += item.wallet; 
+          }
+      });
+  
+      Object.values(groupedItems).forEach(item => {
+          result.push(item);
+      });
+  
+      return result;
+  }
     try {
       const { id } = req.query;
-      console.log(id);
-      let allUser = await signup.findOne({ username: id });
-      response.success(res, 200, allUser);
+      const allUsers = await signup.find();
+      const plainObjects = allUsers.map(doc => doc.toObject());
+      console.log(allUsers)
+      const walletSum = sumWallets(plainObjects);
+      const user = walletSum.filter((item) => item.username === id);
+      response.success(res, 200, `Aggregated users are ${user.length}`, user);
     } catch (error) {
       console.log(error);
       return response.error(res, 500, "internal server error");
