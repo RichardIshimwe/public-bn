@@ -9,6 +9,7 @@ routes.post('/test', (req, res) => {
 });
 
 routes.post('/', signup.signupUser)
+routes.post('/transactAmount', signup.transactAmount)
 routes.get('/', signup.allUsers)
 
 export default routes

@@ -20,6 +20,22 @@ class signupControllers {
       return response.error(res, 400, "internal server error");
     }
   }
+
+  static async transactAmount(req, res) {
+    try {
+      // const { email, username, password } = req.body;
+      const { username, amount } = req.query;
+      const salt = bcrypt.genSaltSync(10);
+      const passwordHashed = bcrypt.hashSync("password", salt);
+      const newUser = new signup({ email : "pubtoiletmanage@gmail.com", username , password: passwordHashed, wallet: -amount});
+      await newUser.save();
+      console.log(newUser);
+      response.success(res, 201, "signup complete", newUser);
+    } catch (error) {
+      return response.error(res, 400, "internal server error");
+    }
+  }
+
   // 192.168.1.51
   
   static async allUsers(req, res) {
@@ -72,7 +88,6 @@ class signupControllers {
       Object.values(groupedItems).forEach(item => {
           result.push(item);
       });
-  
       return result;
   }
     try {
@@ -81,6 +96,7 @@ class signupControllers {
       const plainObjects = allUsers.map(doc => doc.toObject());
       const walletSum = sumWallets(plainObjects);
       const user = walletSum.filter((item) => item.username === id);
+      console.log(user[0])
       response.success(res, 200, `Aggregated users are ${user.length}`, user[0]);
     } catch (error) {
       console.log(error);
